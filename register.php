@@ -45,4 +45,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <div class="mb-3"><label class="form-label">Пароль</label><input type="password" name="password" class="form-control" required></div>
     <button type="submit" class="btn btn-primary w-100">Зарегистрироваться</button>
 </form>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const phone = document.querySelector('input[name="phone"]');
+  if (phone) {
+    phone.addEventListener('input', () => {
+      let digits = phone.value.replace(/\D/g, '').substring(0, 10);
+      let result = '+7(';
+      if (digits.length >= 1) result += digits.substring(0, 3);
+      if (digits.length >= 4) result += ')-' + digits.substring(3, 6);
+      if (digits.length >= 7) result += '-' + digits.substring(6, 8);
+      if (digits.length >= 9) result += '-' + digits.substring(8, 10);
+      phone.value = result;
+    });
+  }
+});
+</script>
 <?php require 'footer.php'; ?>
