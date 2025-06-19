@@ -12,8 +12,13 @@ $stmt = $mysqli->prepare(
     "LEFT JOIN reviews r ON r.application_id = a.id " .
     "WHERE a.user_id = ?"
 );
+if (!$stmt) {
+    die('Query prepare error: ' . htmlspecialchars($mysqli->error));
+}
 $stmt->bind_param('i', $user_id);
-$stmt->execute();
+if (!$stmt->execute()) {
+    die('Query execute error: ' . htmlspecialchars($stmt->error));
+}
 $result = $stmt->get_result();
 ?>
 
