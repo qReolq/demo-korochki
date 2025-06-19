@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 if (!isset($_SESSION['user_id']) && basename($_SERVER['PHP_SELF']) != 'login.php' && basename($_SERVER['PHP_SELF']) != 'register.php') {
@@ -45,7 +44,11 @@ if (!isset($_SESSION['user_id']) && basename($_SERVER['PHP_SELF']) != 'login.php
       <ul class="navbar-nav ms-auto">
         <?php if (isset($_SESSION['user_id'])): ?>
         <li class="nav-item"><a class="nav-link" href="dashboard.php">Главная</a></li>
+        <li class="nav-item"><a class="nav-link" href="courses.php">Курсы</a></li>
         <li class="nav-item"><a class="nav-link" href="application.php">Подать заявку</a></li>
+        <?php if (!empty($_SESSION['is_admin'])): ?>
+        <li class="nav-item"><a class="nav-link" href="admin.php">Админ</a></li>
+        <?php endif; ?>
         <li class="nav-item"><a class="nav-link" href="logout.php">Выйти</a></li>
         <?php endif; ?>
       </ul>
