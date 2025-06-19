@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require 'config.php';
 
 $msg = '';
@@ -13,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt->bind_result($user_id, $hash, $is_admin);
     $stmt->fetch();
 
-    if ($user_id && password_verify($password, $hash)) {
+    if ($user_id && $password === $hash) {
         $_SESSION['user_id'] = $user_id;
         $_SESSION['is_admin'] = $is_admin;
         $target = $is_admin ? 'admin.php' : 'dashboard.php';
