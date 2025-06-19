@@ -30,11 +30,12 @@ if ($check->num_rows > 0) {
 $msg = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $review = trim($_POST['review']);
-    if ($review === '') {
-        $msg = "<div class='alert alert-danger'>Введите текст отзыва.</div>";
+    $rating = (int)$_POST['rating'];
+    if ($review === '' || $rating < 1 || $rating > 5) {
+        $msg = "<div class='alert alert-danger'>Заполните текст и оценку от 1 до 5.</div>";
     } else {
-        $ins = $mysqli->prepare("INSERT INTO reviews (application_id, user_id, review) VALUES (?, ?, ?)");
-        $ins->bind_param("iis", $app_id, $user_id, $review);
+        $ins = $mysqli->prepare("INSERT INTO reviews (application_id, user_id, review, rating) VALUES (?, ?, ?, ?)");
+        $ins->bind_param("iisi", $app_id, $user_id, $review, $rating);
         if ($ins->execute()) {
             $msg = "<div class='alert alert-success'>Отзыв сохранен.</div>";
         } else {
@@ -48,6 +49,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <form method="POST" class="card p-4">
     <div class="mb-3">
         <textarea name="review" class="form-control" rows="5" required></textarea>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Оценка</label>
+        <select name="rating" class="form-select" required>
+            <option value="">Выберите</option>
+            <?php for ($i = 5; $i >= 1; $i--): ?>
+                <option value="<?= $i ?>"><?= $i ?></option>
+            <?php endfor; ?>
+        </select>
     </div>
     <button type="submit" class="btn btn-primary">Сохранить отзыв</button>
 </form>

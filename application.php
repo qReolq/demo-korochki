@@ -40,4 +40,4 @@ $courses = $mysqli->query("SELECT * FROM courses");
     </select></div>
     <button type="submit" class="btn btn-primary w-100">Отправить заявку</button>
 </form>
-<?php require 'footer.php'; ?>
+<?php require "footer.php"; ?>
