@@ -1,5 +1,10 @@
-<?php require 'config.php'; require 'header.php';
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+<?php
+require 'config.php';
+require 'header.php';
+
+$msg = '';
+$selected = isset($_GET['course']) ? (int)$_GET['course'] : 0;
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $course_id = $_POST['course_id'];
     $start_date = $_POST['start_date'];
     $payment_method = $_POST['payment_method'];
@@ -8,20 +13,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("iiss", $_SESSION['user_id'], $course_id, $start_date, $payment_method);
 
     if ($stmt->execute()) {
-        echo "<div class='alert alert-success'>Заявка успешно отправлена.</div>";
+        $msg = "<div class='alert alert-success'>Заявка успешно отправлена.</div>";
     } else {
-        echo "<div class='alert alert-danger'>Ошибка: {$stmt->error}</div>";
+        $msg = "<div class='alert alert-danger'>Ошибка: {$stmt->error}</div>";
     }
 }
 
 $courses = $mysqli->query("SELECT * FROM courses");
 ?>
+<?= $msg ?>
 <form method="POST" class="card p-4 mb-4">
     <h2 class="mb-3">Новая заявка</h2>
     <div class="mb-3"><label class="form-label">Курс</label>
     <select name="course_id" class="form-select">
     <?php while ($c = $courses->fetch_assoc()): ?>
-        <option value="<?= $c['id'] ?>"><?= $c['name'] ?></option>
+        <option value="<?= $c['id'] ?>" <?= $selected == $c['id'] ? 'selected' : '' ?>><?= $c['name'] ?></option>
     <?php endwhile; ?>
     </select>
     </div>

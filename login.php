@@ -1,5 +1,9 @@
-<?php session_start(); require 'config.php'; require 'header.php';
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+<?php
+session_start();
+require 'config.php';
+
+$msg = '';
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $login = $_POST['login'];
     $password = $_POST['password'];
 
@@ -12,16 +16,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($user_id && password_verify($password, $hash)) {
         $_SESSION['user_id'] = $user_id;
         $_SESSION['is_admin'] = $is_admin;
-        if ($is_admin) {
-            header("Location: admin.php");
-        } else {
-            header("Location: dashboard.php");
-        }
+        $target = $is_admin ? 'admin.php' : 'dashboard.php';
+        header("Location: $target");
+        exit();
     } else {
-        echo "<div class='alert alert-danger'>Неверный логин или пароль.</div>";
+        $msg = "<div class='alert alert-danger'>Неверный логин или пароль.</div>";
     }
 }
 ?>
+<?php require 'header.php'; ?>
+<?= $msg ?>
 <form method="POST" class="card p-4">
     <h2 class="mb-3">Вход</h2>
     <div class="mb-3"><label class="form-label">Логин</label><input type="text" name="login" class="form-control" required></div>
