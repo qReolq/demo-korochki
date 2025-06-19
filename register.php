@@ -9,8 +9,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $login = $_POST['login'];
     $password = $_POST['password'];
 
-    if (mb_strlen($login) < 6 || mb_strlen($_POST['password']) < 6) {
-        $msg = "<div class='alert alert-danger'>Логин и пароль должны быть не менее 6 символов.</div>";
+    if (mb_strlen($login) < 6 || !preg_match('/^[\x{0400}-\x{04FF}]+$/u', $login)) {
+        $msg = "<div class='alert alert-danger'>Логин должен быть не менее 6 символов и содержать только кириллицу.</div>";
+    } elseif (mb_strlen($_POST['password']) < 6) {
+        $msg = "<div class='alert alert-danger'>Пароль должен быть не менее 6 символов.</div>";
     } else {
         $check = $mysqli->prepare("SELECT id FROM users WHERE login = ?");
         $check->bind_param("s", $login);
