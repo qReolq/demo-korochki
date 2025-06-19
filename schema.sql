@@ -31,6 +31,7 @@ CREATE TABLE reviews (
     application_id INT NOT NULL,
     user_id INT NOT NULL,
     review TEXT NOT NULL,
+    rating TINYINT NOT NULL CHECK (rating BETWEEN 1 AND 5),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (application_id) REFERENCES applications(id),
     FOREIGN KEY (user_id) REFERENCES users(id)

@@ -6,7 +6,7 @@ $user_id = $_SESSION['user_id'];
 
 $stmt = $mysqli->prepare(
     "SELECT c.name, c.description, c.image_url, a.id AS app_id, a.start_date, " .
-    "a.payment_method, a.status, r.id AS review_id " .
+    "a.payment_method, a.status, r.id AS review_id, r.rating " .
     "FROM applications a " .
     "JOIN courses c ON a.course_id = c.id " .
     "LEFT JOIN reviews r ON r.application_id = a.id " .
@@ -37,7 +37,7 @@ $result = $stmt->get_result();
                 <span class='badge bg-info'><?= htmlspecialchars($row['status']) ?></span>
                 <?php if ($row['status'] == 'Обучение завершено'): ?>
                     <?php if ($row['review_id']): ?>
-                        <p class='text-success mt-2'>Отзыв оставлен</p>
+                        <p class='text-success mt-2'>Отзыв оставлен (<?= (int)$row['rating'] ?> из 5)</p>
                     <?php else: ?>
                         <a href='review.php?id=<?= $row['app_id'] ?>' class='btn btn-sm btn-outline-primary mt-2'>Оставить отзыв</a>
                     <?php endif; ?>
