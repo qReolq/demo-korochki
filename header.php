@@ -52,6 +52,9 @@ if (!isset($_SESSION['user_id']) && basename($_SERVER['PHP_SELF']) != 'login.php
         <li class="nav-item"><a class="nav-link" href="admin.php">Админ</a></li>
         <?php endif; ?>
         <li class="nav-item"><a class="nav-link" href="logout.php">Выйти</a></li>
+        <?php else: ?>
+        <li class="nav-item"><a class="nav-link" href="login.php">Вход</a></li>
+        <li class="nav-item"><a class="nav-link" href="register.php">Регистрация</a></li>
         <?php endif; ?>
       </ul>
     </div>

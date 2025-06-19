@@ -11,8 +11,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (mb_strlen($login) < 6 || !preg_match('/^[\x{0400}-\x{04FF}]+$/u', $login)) {
         $msg = "<div class='alert alert-danger'>Логин должен быть не менее 6 символов и содержать только кириллицу.</div>";
-    } elseif (mb_strlen($_POST['password']) < 6) {
+    } elseif (mb_strlen($password) < 6) {
         $msg = "<div class='alert alert-danger'>Пароль должен быть не менее 6 символов.</div>";
+    } elseif (!preg_match('/^\+7\(\d{3}\)-\d{3}-\d{2}-\d{2}$/', $phone)) {
+        $msg = "<div class='alert alert-danger'>Телефон должен быть в формате +7(XXX)-XXX-XX-XX.</div>";
     } else {
         $check = $mysqli->prepare("SELECT id FROM users WHERE login = ?");
         $check->bind_param("s", $login);
@@ -39,32 +41,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <form method="POST" class="card p-4">
     <h2 class="mb-3">Регистрация</h2>
     <div class="mb-3"><label class="form-label">ФИО</label><input type="text" name="fio" class="form-control" required></div>
-    <div class="mb-3"><label class="form-label">Телефон</label><input type="text" name="phone" class="form-control" required></div>
+    <div class="mb-3">
+        <label class="form-label">Телефон</label>
+        <input type="text" name="phone" class="form-control" placeholder="+7(XXX)-XXX-XX-XX" required>
+    </div>
     <div class="mb-3"><label class="form-label">Email</label><input type="email" name="email" class="form-control" required></div>
     <div class="mb-3"><label class="form-label">Логин</label><input type="text" name="login" class="form-control" required></div>
     <div class="mb-3"><label class="form-label">Пароль</label><input type="password" name="password" class="form-control" required></div>
     <button type="submit" class="btn btn-primary w-100">Зарегистрироваться</button>
 </form>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const phone = document.querySelector('input[name="phone"]');
-  if (phone) {
-    phone.addEventListener('input', () => {
-      let digits = phone.value.replace(/\D/g, '').substring(0, 10);
-      let result = '+7 (';
-      if (digits.length > 0) {
-        result += digits.substring(0, 3);
-      }
-      if (digits.length >= 4) {
-        result += ') ' + digits.substring(3, 6);
-      } else if (digits.length >= 3) {
-        result += ')';
-      }
-      if (digits.length >= 7) result += '-' + digits.substring(6, 8);
-      if (digits.length >= 9) result += '-' + digits.substring(8, 10);
-      phone.value = result;
-    });
-  }
-});
-</script>
 <?php require 'footer.php'; ?>
