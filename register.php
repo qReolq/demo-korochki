@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $phone = $_POST['phone'];
     $email = $_POST['email'];
     $login = $_POST['login'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $password = $_POST['password'];
 
     if (mb_strlen($login) < 6 || mb_strlen($_POST['password']) < 6) {
         $msg = "<div class='alert alert-danger'>Логин и пароль должны быть не менее 6 символов.</div>";
